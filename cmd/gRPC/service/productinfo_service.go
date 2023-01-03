@@ -8,11 +8,13 @@ import (
 	pb "learning-grpc/service/ecommerce"
 )
 
+// 用结构体来作为服务器
 type server struct {
 	productMap map[string]*pb.Product
 	pb.UnsafeProductInfoServer
 }
 
+// AddProduct 定义服务器要实现的方法，使用Product和ProductID两种消息（Message）来实现业务逻辑
 func (s *server) AddProduct(ctx context.Context, in *pb.Product) (*pb.ProductID, error) {
 	out, err := uuid.NewV4()
 	if err != nil {
