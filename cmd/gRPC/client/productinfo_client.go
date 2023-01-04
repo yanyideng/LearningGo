@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"github.com/golang/protobuf/ptypes/wrappers"
 	"google.golang.org/grpc"
 	pb "learning-grpc/client/ecommerce"
 	"log"
@@ -42,4 +43,8 @@ func main() {
 		log.Fatalf("Could not get product: %v", err)
 	}
 	log.Printf("Prodct: %s", product.String())
+
+	ordrMgtClient := pb.NewOrderManagementClient(conn)
+	retrievedOrder, err := ordrMgtClient.GetOrder(ctx, &wrappers.StringValue{Value: "106"})
+	log.Printf("Get order response -> : %s", retrievedOrder)
 }

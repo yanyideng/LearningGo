@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"github.com/gofrs/uuid"
+	"github.com/golang/protobuf/ptypes/wrappers"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	pb "learning-grpc/service/ecommerce"
@@ -11,6 +12,7 @@ import (
 // 用结构体来作为服务器
 type server struct {
 	productMap map[string]*pb.Product
+	orderMap   map[string]*pb.Order
 	pb.UnsafeProductInfoServer
 }
 
@@ -34,4 +36,9 @@ func (s *server) GetProduct(ctx context.Context, in *pb.ProductID) (*pb.Product,
 		return value, status.New(codes.OK, "").Err()
 	}
 	return nil, status.Errorf(codes.NotFound, "Product does not exist.", in.Value)
+}
+
+func (s *server) GetOrder(ctx context.Context, orderId *wrappers.StringValue) (*pb.Order, error) {
+	ord := s.orderMap[orderId.Value]
+	return ord, nil
 }
